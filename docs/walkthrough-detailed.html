@@ -148,6 +148,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
 .toc{columns:2 280px;column-gap:30px;margin-top:10px}
 .toc a{display:block;padding:4px 0;text-decoration:none;color:var(--ink-2)}
 .toc a:hover{color:var(--yellow)}
+.shot{width:250px;margin:0 auto;text-align:center}.shot img{width:100%;height:auto;border:3px solid #4a535b;border-radius:30px;box-shadow:0 20px 40px -18px #000;background:#fff}.shots{display:flex;flex-wrap:wrap;gap:26px;justify-content:center;margin:22px 0}
 </style>
 </head>
 <body>
@@ -230,7 +231,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
 <section id="setup"><div class="wrap">
   <div class="kicker">Chapter 2 · Owner · do this once</div>
   <h2>First-time setup</h2>
-  <p class="sub">The Owner does this once, in this order. Order matters: places first, because every count needs a place to live.</p>
+  <p class="sub">The Owner does this once, in this order. Order matters: places first, because every count needs a place to live.</p><div class="shots"><div class="shot"><img src="img/setup.png" alt="The Setup tab" loading="lazy"><div class="cap">The Setup tab: where all the steps below start</div></div></div>
 
   <h4>Step 1 - Add your places</h4>
   <ol class="steps">
@@ -297,14 +298,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
       <div class="card g"><h3>👤 Me <span class="who">Technician</span></h3><p style="margin:0">Replaces Setup for a Technician. One box: <b>your name</b>, so your Moves are labelled.</p></div>
     </div>
     <div>
-      <div class="phone"><div class="scr">
-        <div class="top"><b>Parts</b></div>
-        <div class="row"><div>20A Single-Pole Breaker<small>Breakers</small></div><span class="pill">12</span></div>
-        <div class="row"><div>14/2 NM-B Wire, 75 m<small>Wire</small></div><span class="pill low">3</span></div>
-        <div class="row"><div>Wire Nuts, Yellow (bag)<small>Connectors</small></div><span class="pill">22</span></div>
-        <div class="row"><div>Duplex Receptacle 15A<small>Devices</small></div><span class="pill">30</span></div>
-        <div class="tabbar"><i class="on">Parts</i><i>Scan</i><i>Low stock</i><i>Setup</i></div>
-      </div><div class="cap">Illustration - your screen may differ slightly</div></div>
+      <div class="shot"><img src="img/parts.png" alt="The Parts tab" loading="lazy"><div class="cap">The Parts tab</div></div>
     </div>
   </div>
 </div></section>
@@ -319,6 +313,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
     <li>Pick where you are or whose stock you're working from: your truck in the morning, the Shop when you're in the building.</li>
     <li>The counts in the list now show <b>that place</b>, and quick changes (chapter 7) apply there.</li>
   </ol>
+  <div class="shots"><div class="shot"><img src="img/location-menu.png" alt="Location menu" loading="lazy"><div class="cap">Tap the place name to switch</div></div></div>
   <div class="why">Most of your taps are "I just used one." If the app had to ask "where from?" every time, nobody would bother. So you tell it once where you are, and every quick tap assumes that place. <b>Check it when you start your day</b> - it's the usual reason a count looks "wrong".</div>
   <div class="tip">The filter menu (chapter 5) has an <b>On [place] only</b> switch. On = show just the parts that are at your place. Off = show the whole catalogue.</div>
 </div></section>
@@ -350,12 +345,15 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
     <li><b>Sort</b> - <b>Name</b> (A to Z), <b>Low stock first</b> (what needs buying floats to the top), or <b>Quantity</b>.</li>
   </ol>
 
+  <div class="shots"><div class="shot"><img src="img/filter-menu.png" alt="Filter menu" loading="lazy"><div class="cap">Filter and sort menu</div></div></div>
+
   <h4>C · Scan</h4>
   <ol class="steps">
     <li>Tap <span class="btn">Scan</span>, then <span class="btn">Scan</span> (camera) the first time. <b>Allow the camera</b> when your phone asks.</li>
     <li>Hold about a hand-width from the barcode or QR label, steady, in decent light.</li>
     <li>The part opens by itself.</li>
   </ol>
+  <div class="shots"><div class="shot"><img src="img/scan.png" alt="Scan tab" loading="lazy"><div class="cap">The Scan tab</div></div></div>
   <p><b>If the code isn't known</b> the app says so. An Owner gets an <span class="btn">Add part</span> button that starts a new part with that code already filled in. A Technician is told to ask an Owner.</p>
   <div class="tip">No barcode - loose screws, bulk wire? Open the part and tap <b>Show / print QR label</b>, print it, stick it on the bin. From then on it scans like anything else. This is why every part has a "LocaTrack code".</div>
   <div class="tip warn">Scanning needs a real camera. If you're using the app on a Mac, it will ask you to type the code instead.</div>
@@ -381,14 +379,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
       <p style="margin-top:14px">At the top right: <span class="btn">Move stock</span> for anything beyond a single tap, and <span class="btn d">Edit</span> <span class="who o">Owner</span> to change the part's details.</p>
     </div>
     <div>
-      <div class="phone"><div class="scr">
-        <div class="top"><b>20A Breaker</b><span style="color:#777">On hand: 16 each</span></div>
-        <div style="margin:10px 12px 0;text-align:center;font-size:11px;color:#777">QUICK ADJUST AT TRUCK 1</div>
-        <div class="field" style="justify-content:space-around;align-items:center;font-size:20px"><span style="color:var(--orange)">⊖</span><span><b style="color:#1c1c1e;font-size:26px">4</b></span><span style="color:#4fb36b">⊕</span></div>
-        <div class="row" style="margin-top:10px"><div>Shop</div><span class="pill">12</span></div>
-        <div class="row"><div>Truck 1 <small>here</small></div><span class="pill">4</span></div>
-        <div class="row"><div><b>Total</b></div><span class="pill">16</span></div>
-      </div><div class="cap">Illustration</div></div>
+      <div class="shot"><img src="img/part.png" alt="A part page" loading="lazy"><div class="cap">A part page</div></div>
     </div>
   </div>
   <div class="why">There's no "Edit quantity" anywhere on this page - and that's on purpose. To change a count you record a Move. The <b>History</b> section is where the Moves are kept, so if a count looks off, the answer is usually in there.</div>
@@ -430,16 +421,11 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
       </table>
     </div>
     <div>
-      <div class="phone"><div class="scr">
-        <div class="top"><b>20A Breaker</b></div>
-        <div class="seg"><i>Receive</i><i class="on">Use</i><i>Adjust</i><i>Transfer</i></div>
-        <div class="field"><span>Location</span><span>Truck 1 ›</span></div>
-        <div class="field"><span>Quantity</span><span><b style="color:#1c1c1e">3</b></span></div>
-        <div class="field"><span>Job</span><span>Main St ›</span></div>
-        <div class="go">Save</div>
-      </div><div class="cap">Illustration</div></div>
+      <div class="shot"><img src="img/move-use.png" alt="Move stock, Use tile" loading="lazy"><div class="cap">Move stock: the Use tile</div></div>
     </div>
   </div>
+
+  <div class="shots"><div class="shot"><img src="img/move-tiles.png" alt="Four tiles" loading="lazy"><div class="cap">The four tiles (Receive is selected)</div></div></div>
 
   <h4>The Save button is grey until it makes sense</h4>
   <p>You can't save half a form: Save stays grey until the quantity is a real number and the places are filled in (and for <b>Adjust</b>, the note). Grey Save means <i>something is still missing</i>, not that the app is broken.</p>
@@ -510,6 +496,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
     <li>A banner appears: <b>"Committed N parts to [job]"</b> with an <span class="btn">Undo</span> button. It only stays for a few seconds.</li>
   </ol>
   <div class="why">Nothing is recorded until you tap Commit. You can wander off, change quantities, and decide against it. And because the basket is posted as ordinary "Use" Moves, the stock counts <i>and</i> the job's cost report update together.</div>
+  <div class="shots"><div class="shot"><img src="img/job-menu.png" alt="Job menu" loading="lazy"><div class="cap">The briefcase menu: pick the job</div></div></div>
   <h4>Leaving without committing</h4>
   <p>If the basket has items and you try to leave, the app asks. <span class="btn d">Keep picking</span> returns to your basket. <span class="btn">Discard</span> throws it away and nothing changes.</p>
   <div class="tip warn">After you tap Commit, only the <b>Undo</b> banner can take the whole batch back, and it disappears after a few seconds. After that, correct individual lines from each part's History (chapter 10) or with a new Receive.</div>
@@ -552,13 +539,7 @@ ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
       <div class="tip">Alerts: with <b>Low stock alerts</b> on in Setup, you're told when a part first reaches its reorder number. They show while the app is open or in use, and only repeat after the part has recovered and dropped again.</div>
     </div>
     <div>
-      <div class="phone"><div class="scr">
-        <div class="top"><b>Low stock</b></div>
-        <div class="row"><div>14/2 NM-B Wire, 75 m<small>Reorder at 6</small></div><span class="pill low">4</span></div>
-        <div class="row"><div>GFCI Receptacle 20A<small>Reorder at 5</small></div><span class="pill low">2</span></div>
-        <div class="row"><div>1/2" EMT Strap<small>Reorder at 50</small></div><span class="pill low">38</span></div>
-        <div class="tabbar"><i>Parts</i><i>Scan</i><i class="on">Low stock</i><i>Setup</i></div>
-      </div><div class="cap">Illustration</div></div>
+      <div class="shot"><img src="img/low-stock.png" alt="The Low stock tab" loading="lazy"><div class="cap">The Low stock tab (Owner view)</div></div>
     </div>
   </div>
 </div></section>
