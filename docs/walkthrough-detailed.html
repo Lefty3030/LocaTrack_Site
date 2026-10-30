@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LocaTrack - Detailed Walkthrough</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ===== THEME TOKENS - workshop: charcoal steel + safety orange + hi-vis yellow ===== */
+:root{
+  --bg:#15181b;          /* shop-floor black */
+  --panel:#1f2428;       /* steel panel */
+  --panel-2:#272d32;
+  --line:#3a424a;
+  --ink:#eceff1;
+  --ink-2:#b4bcc3;
+  --mut:#8a949c;
+  --orange:#ff7a1a;      /* safety orange */
+  --yellow:#ffc928;      /* hi-vis / bolt */
+  --green:#4fb36b;
+  --red:#e5484d;
+  --head:'Oswald','Arial Narrow',Impact,sans-serif;
+  --body:'Barlow','Helvetica Neue',Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.55;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 14px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.018) 0 2px,transparent 2px 14px);
+}
+a{color:var(--yellow)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+
+/* hazard stripe */
+.hazard{height:14px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 18px,#111 18px 36px)}
+
+/* nav */
+nav{position:sticky;top:0;z-index:20;background:rgba(21,24,27,.96);backdrop-filter:blur(6px);border-bottom:2px solid var(--orange)}
+nav .wrap{display:flex;gap:6px;overflow-x:auto;padding:10px 20px;scrollbar-width:none}
+nav a{flex:none;text-decoration:none;color:var(--ink-2);font-family:var(--head);text-transform:uppercase;letter-spacing:.06em;font-size:14px;padding:7px 12px;border:1px solid var(--line);border-radius:4px}
+nav a:hover{color:#111;background:var(--yellow);border-color:var(--yellow)}
+
+.store{display:inline-block;margin-top:26px;font-family:var(--head);text-transform:uppercase;letter-spacing:.08em;font-size:20px;color:#111;background:var(--yellow);text-decoration:none;padding:12px 24px;border-radius:4px;border-bottom:4px solid var(--orange)}
+.store:hover{background:var(--orange)}
+/* hero */
+header.hero{padding:70px 0 54px}
+.badge{display:inline-block;font-family:var(--head);letter-spacing:.14em;text-transform:uppercase;font-size:14px;color:#111;background:var(--yellow);padding:5px 12px;border-radius:3px;margin-bottom:22px}
+h1{font-family:var(--head);font-weight:700;text-transform:uppercase;font-size:clamp(48px,9vw,96px);line-height:.98;letter-spacing:.01em}
+h1 span{color:var(--orange)}
+.lede{font-size:clamp(20px,2.6vw,26px);color:var(--ink-2);max-width:760px;margin-top:24px}
+.lede b{color:var(--ink)}
+
+/* sections */
+section{padding:54px 0;border-top:1px solid var(--line)}
+.kicker{font-family:var(--head);color:var(--orange);letter-spacing:.18em;text-transform:uppercase;font-size:15px;margin-bottom:6px}
+h2{font-family:var(--head);text-transform:uppercase;font-weight:700;font-size:clamp(32px,5vw,50px);line-height:1.05;margin-bottom:14px}
+h3{font-family:var(--head);text-transform:uppercase;font-weight:600;font-size:24px;letter-spacing:.03em;margin-bottom:6px}
+p{margin-bottom:14px;color:var(--ink-2)}
+p b,li b{color:var(--ink)}
+.sub{max-width:760px;margin-bottom:26px}
+
+/* cards */
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.card{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--orange);border-radius:6px;padding:22px}
+.card .big{font-family:var(--head);font-size:42px;line-height:1;color:var(--yellow);margin-bottom:8px}
+.card.y{border-left-color:var(--yellow)}
+.card.g{border-left-color:var(--green)}
+.card.r{border-left-color:var(--red)}
+
+/* equation */
+.eq{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:22px 0;font-family:var(--head);text-transform:uppercase;font-size:22px}
+.eq .t{background:var(--panel-2);border:2px solid var(--orange);padding:10px 18px;border-radius:4px}
+.eq .op{color:var(--yellow);font-size:30px}
+
+/* flow steps */
+.flow{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:34px;align-items:start}
+@media(max-width:820px){.flow{grid-template-columns:1fr}}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{counter-increment:s;position:relative;padding:14px 16px 14px 70px;margin-bottom:12px;background:var(--panel);border:1px solid var(--line);border-radius:6px;color:var(--ink-2)}
+ol.steps li::before{content:counter(s);position:absolute;left:14px;top:12px;width:42px;height:42px;display:grid;place-items:center;font-family:var(--head);font-size:24px;font-weight:700;color:#111;background:var(--yellow);border-radius:50%;box-shadow:0 0 0 3px var(--bg),0 0 0 5px var(--orange)}
+.tip{border:2px dashed var(--yellow);border-radius:6px;padding:14px 18px;margin-top:16px;background:rgba(255,201,40,.06);color:var(--ink-2)}
+.tip::before{content:"TIP  ";font-family:var(--head);color:var(--yellow);letter-spacing:.12em}
+.warn{border:2px dashed var(--red);background:rgba(229,72,77,.07)}
+.warn::before{content:"HEADS UP  ";color:var(--red)}
+.btn{display:inline-block;font-family:var(--head);text-transform:uppercase;letter-spacing:.05em;font-size:.82em;padding:1px 9px;border-radius:3px;background:var(--orange);color:#111;white-space:nowrap}
+.btn.d{background:var(--panel-2);color:var(--ink);border:1px solid var(--line)}
+
+/* phone mockups */
+.phone{width:250px;margin:0 auto;background:#0b0d0f;border:3px solid #4a535b;border-radius:34px;padding:12px 10px 10px;box-shadow:0 20px 40px -18px #000,0 0 0 1px #000}
+.phone .scr{background:#f2f2f5;border-radius:24px;overflow:hidden;color:#1c1c1e;font-family:var(--body);font-size:13px;min-height:340px;position:relative}
+.phone .top{background:#fff;padding:12px 14px 8px;border-bottom:1px solid #ddd}
+.phone .top b{font-family:var(--head);font-size:20px;text-transform:uppercase;letter-spacing:.04em;display:block}
+.row{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;background:#fff;border-bottom:1px solid #e4e4e8;color:#1c1c1e}
+.row small{display:block;color:#777;font-size:11px}
+.pill{background:#e8e8ec;border-radius:10px;padding:2px 9px;font-weight:700;font-size:12px}
+.pill.low{background:#ffe1dc;color:#c0281c}
+.tabbar{position:absolute;left:0;right:0;bottom:0;display:flex;background:#fafafa;border-top:1px solid #ccc;padding:6px 0 8px}
+.tabbar i{flex:1;text-align:center;font-style:normal;font-size:10px;color:#8a8a8e}
+.tabbar i.on{color:var(--orange);font-weight:700}
+.tabbar i::before{content:"";display:block;width:16px;height:16px;margin:0 auto 2px;border-radius:4px;background:currentColor;opacity:.75}
+.field{margin:8px 12px 0;background:#fff;border-radius:8px;padding:8px 10px;display:flex;justify-content:space-between;border:1px solid #e0e0e4}
+.field span:last-child{color:#777}
+.seg{display:flex;margin:10px 12px 0;background:#e3e3e8;border-radius:8px;padding:2px;font-size:11px}
+.seg i{flex:1;text-align:center;font-style:normal;padding:5px 0;border-radius:6px}
+.seg i.on{background:#fff;font-weight:700}
+.go{margin:14px 12px 0;background:var(--orange);color:#fff;text-align:center;padding:9px;border-radius:9px;font-weight:700}
+.cap{text-align:center;font-family:var(--head);text-transform:uppercase;letter-spacing:.1em;font-size:12px;color:var(--mut);margin-top:10px}
+
+/* tables */
+table{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--head);text-transform:uppercase;letter-spacing:.08em;font-size:15px;background:var(--panel-2);color:var(--yellow)}
+td:first-child{color:var(--ink);font-weight:600}
+.yes{color:var(--green);font-weight:700}.no{color:var(--red);font-weight:700}
+
+/* where things live diagram */
+.places{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:22px 0}
+.place{background:var(--panel);border:2px solid var(--line);border-top:6px solid var(--yellow);border-radius:6px;padding:16px;text-align:center}
+.place .ic{font-size:40px;line-height:1}
+.place b{display:block;font-family:var(--head);text-transform:uppercase;font-size:22px;margin-top:6px}
+.arrow{text-align:center;color:var(--orange);font-family:var(--head);font-size:18px;letter-spacing:.1em;text-transform:uppercase;margin:4px 0 20px}
+
+details{background:var(--panel);border:1px solid var(--line);border-radius:6px;margin-bottom:10px}
+summary{cursor:pointer;padding:16px 20px;font-family:var(--head);text-transform:uppercase;letter-spacing:.04em;font-size:20px;color:var(--ink)}
+details[open] summary{color:var(--yellow);border-bottom:1px solid var(--line)}
+details p{padding:14px 20px 0}details p:last-child{padding-bottom:6px}
+
+footer{padding:40px 0 60px;text-align:center;color:var(--mut);border-top:1px solid var(--line);font-size:15px}
+footer b{font-family:var(--head);letter-spacing:.14em;color:var(--orange);text-transform:uppercase}
+@media print{nav{display:none}body{background:#fff;color:#000}}
+/* detailed-guide additions */
+.why{border-left:5px solid var(--green);background:rgba(79,179,107,.07);border-radius:6px;padding:12px 18px;margin:14px 0;color:var(--ink-2)}
+.why::before{content:"WHY IT WORKS THIS WAY  ";font-family:var(--head);color:var(--green);letter-spacing:.1em;font-size:.85em}
+.choice{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:16px 0}
+.choice .card h3{font-size:21px}
+.choice .card .btn{margin-bottom:8px}
+.who{font-family:var(--head);font-size:.75em;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:3px;border:1px solid var(--line);color:var(--ink-2);vertical-align:middle}
+.who.o{border-color:var(--orange);color:var(--orange)}
+h4{font-family:var(--head);text-transform:uppercase;font-size:18px;letter-spacing:.05em;color:var(--yellow);margin:22px 0 8px}
+ol.steps li b.q{color:var(--yellow)}
+ol.steps li small{display:block;margin-top:4px;color:var(--mut);font-size:.82em}
+.toc{columns:2 280px;column-gap:30px;margin-top:10px}
+.toc a{display:block;padding:4px 0;text-decoration:none;color:var(--ink-2)}
+.toc a:hover{color:var(--yellow)}
+</style>
+</head>
+<body>
+
+<div class="hazard"></div>
+<nav><div class="wrap">
+  <a href="#words">Words</a>
+  <a href="#setup">First Setup</a>
+  <a href="#tabs">Tabs</a>
+  <a href="#where">Where Am I</a>
+  <a href="#find">Find</a>
+  <a href="#part">Part Page</a>
+  <a href="#quick">Quick Taps</a>
+  <a href="#move">Move Stock</a>
+  <a href="#pick">Pick to Job</a>
+  <a href="#undo">Undo</a>
+  <a href="#low">Low Stock</a>
+  <a href="#costs">Costs</a>
+  <a href="#tidy">Tidy Up</a>
+  <a href="#sheet">Spreadsheets</a>
+  <a href="#roles">Roles</a>
+  <a href="#share">Share</a>
+  <a href="#help">Stuck</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="badge">Detailed Walkthrough</span>
+  <h1>Loca<span>Track</span></h1>
+  <p class="lede">Every screen, every button, and <b>why it works the way it does.</b> Read it start to finish once, then keep it handy.</p>
+  <p class="lede" style="margin-top:0">Each step says <b>what to tap</b>, <b>what you'll see</b>, and where there's a choice, <b>which one to pick and why</b>. No computer know-how needed.</p>
+  <p class="lede" style="margin-top:0;font-size:18px">Short on time? The one-page <a href="walkthrough.html">Field Walkthrough</a> covers the basics.</p>
+  <a class="store" href="https://apps.apple.com/ca/app/locatrack/id6813612392" target="_blank" rel="noopener">Get LocaTrack on the App Store</a>
+</div></header>
+<div class="hazard"></div>
+
+<section><div class="wrap">
+  <div class="kicker">What's inside</div>
+  <h2>How this guide is laid out</h2>
+  <div class="toc">
+    <a href="#words">1 · The words you need</a>
+    <a href="#setup">2 · First-time setup (Owner)</a>
+    <a href="#tabs">3 · The tabs along the bottom</a>
+    <a href="#where">4 · "Where am I?" - the location switcher</a>
+    <a href="#find">5 · Finding a part</a>
+    <a href="#part">6 · Reading a part's page</a>
+    <a href="#quick">7 · Quick one-at-a-time changes</a>
+    <a href="#move">8 · Move stock: Receive, Use, Adjust, Transfer</a>
+    <a href="#pick">9 · Pick several parts to a job</a>
+    <a href="#undo">10 · Undoing a mistake</a>
+    <a href="#low">11 · Low stock and reordering</a>
+    <a href="#costs">12 · Job costs and Shop history (Owner)</a>
+    <a href="#tidy">13 · Tidying up: jobs, places, parts</a>
+    <a href="#sheet">14 · Spreadsheets in and out</a>
+    <a href="#roles">15 · Owner vs Technician</a>
+    <a href="#share">16 · Sharing with your partner</a>
+    <a href="#help">17 · If you get stuck + cheat sheet</a>
+  </div>
+  <div class="tip">Look for three kinds of boxes. <b>Tip</b> = a shortcut. <b>Why it works this way</b> = the reason behind a choice (worth reading once). <b>Heads up</b> = something you can't undo.</div>
+</div></section>
+
+<!-- ============ WORDS ============ -->
+<section id="words"><div class="wrap">
+  <div class="kicker">Chapter 1</div>
+  <h2>The words you need</h2>
+  <p class="sub">LocaTrack uses a handful of words on purpose. Learn these and every screen makes sense.</p>
+  <div class="grid g3">
+    <div class="card"><div class="big">PART</div><h3>The item</h3><p>One kind of thing you stock: a 20A breaker, a roll of 14/2. A Part is a <i>description</i> - name, photo, category - <b>never a count</b>.</p></div>
+    <div class="card y"><div class="big">LOCATION</div><h3>The place</h3><p>The <b>Shop</b>, a <b>Truck</b>, or a <b>Job site</b>. Every count is "this many <i>at</i> this place."</p></div>
+    <div class="card g"><div class="big">STOCK</div><h3>The count</h3><p>How many of one Part are at one Location. <b>You can't type it in.</b> The app adds it up from the history.</p></div>
+    <div class="card"><div class="big">MOVE</div><h3>Something happened</h3><p>One line in the history: <i>received 10</i>, <i>used 3</i>, <i>moved 5</i>, <i>fixed a count</i>. Stock is just the total of the Moves.</p></div>
+    <div class="card y"><div class="big">JOB</div><h3>The work</h3><p>A named piece of work - "123 Main St". When you <b>Use</b> a part you can tag it to a Job so you know what the job cost.</p></div>
+    <div class="card g"><div class="big">REORDER</div><h3>"Time to buy"</h3><p>A number an Owner sets per part. When the <b>total across all places</b> drops to it or below, the part lands on the Low stock list.</p></div>
+  </div>
+  <div class="why">Why can't you just type a new number? Because if you and your partner both change the same count while one of you has no signal, one number would overwrite the other and somebody's work is lost. Recording <i>what happened</i> ("used 3") means both changes are added together when the phones meet up. It also means the history shows <b>who did what, and when</b>.</div>
+  <div class="arrow">Supplier ▶ Shop ▶ Truck ▶ Job Site ▶ Used</div>
+  <p>That's the life of a part. Every arrow is something you can record in the app.</p>
+</div></section>
+
+<!-- ============ SETUP ============ -->
+<section id="setup"><div class="wrap">
+  <div class="kicker">Chapter 2 · Owner · do this once</div>
+  <h2>First-time setup</h2>
+  <p class="sub">The Owner does this once, in this order. Order matters: places first, because every count needs a place to live.</p>
+
+  <h4>Step 1 - Add your places</h4>
+  <ol class="steps">
+    <li>Tap <span class="btn">Setup</span> → <b>Locations</b>.</li>
+    <li>In the <b>Add</b> box, type a name ("Truck 1", "Shop") and pick its <b>Type</b>: <span class="btn d">Shop</span> <span class="btn d">Truck</span> or <span class="btn d">Job site</span>. Tap <span class="btn">Add</span>.
+      <small>Type is only a label to help you tell them apart - it doesn't change how counting works.</small></li>
+    <li>Repeat for each truck and for any job site you keep stock at long-term.</li>
+  </ol>
+  <div class="why">You don't need a Job site entry for every job. Add one only if materials <i>sit there</i> between visits. For parts that go straight from the truck into the wall, you'll simply tag the Job when you "Use" them (chapter 8).</div>
+
+  <h4>Step 2 - Check your lists</h4>
+  <ol class="steps">
+    <li><span class="btn">Setup</span> → <b>Lists</b> has two: <b>Categories</b> (Breakers, Wire…) and <b>Units</b> (each, m, box…).</li>
+    <li>Tap one to add, rename or archive values. Renaming a value also renames it on every part that uses it.</li>
+  </ol>
+  <div class="why">These are pick-lists, not free typing. That way you never end up with "Breakers", "breakers" and "Brakers" as three different categories.</div>
+
+  <h4>Step 3 - Put your parts in</h4>
+  <p>Two ways. Pick by size:</p>
+  <div class="choice">
+    <div class="card y"><h3>A few parts</h3><span class="btn">Parts → ＋</span><p style="margin:0">Add one at a time. Best for a handful. Details below.</p></div>
+    <div class="card"><h3>Dozens or hundreds</h3><span class="btn">Setup → Import spreadsheet</span><p style="margin:0">Fill in a spreadsheet on a computer and bring it in all at once. See chapter 14.</p></div>
+    <div class="card g"><h3>Just trying it out</h3><span class="btn">Setup → Import sample data</span><p style="margin:0">Adds generic example parts so you can practise. Use <b>Empty inventory</b> before loading the real thing.</p></div>
+  </div>
+  <p>Adding one part - the form, field by field:</p>
+  <ol class="steps">
+    <li><b>Photo</b> (optional). <span class="btn d">Take photo</span> or <span class="btn d">Choose from library</span>. A picture helps a new hire pick the right one.</li>
+    <li><b>Name.</b> Write it the way you'd say it out loud: "20A Single-Pole Breaker".</li>
+    <li><b>Category</b> and <b>Unit</b> from your lists.</li>
+    <li><b>Manufacturer barcode</b> (optional). Type it, or leave blank. If the box has a barcode, entering it means scanning the box finds the part later.
+      <small>No barcode? Skip it - LocaTrack gives every part its own code and QR label (chapter 5).</small></li>
+    <li><b>Cost section</b> <span class="who o">Owner only</span>: <b>Unit cost</b> (what you pay), <b>Sell price</b> (what you charge, optional) and <b>Reorder at</b> (the "time to buy" number).
+      <small>Pick Reorder at as "how few can I be down to before I'm in trouble?" - enough to cover the days it takes the supplier to deliver.</small></li>
+    <li><b>Supplier note</b> (optional). Supplier name and item code, e.g. "ACME, ABC12345". This is what groups your shopping list by supplier later.</li>
+    <li>Tap <span class="btn">Save</span>.</li>
+  </ol>
+
+  <h4>Step 4 - Enter what's on the shelves today</h4>
+  <ol class="steps">
+    <li>A new part starts at zero everywhere. Open it → <span class="btn">Move stock</span> → <span class="btn d">Receive</span>.</li>
+    <li>Pick the place (Shop, a truck) and type what's physically there. <span class="btn">Save</span>.</li>
+  </ol>
+  <div class="tip">With a big catalogue it's faster to put the starting quantities in the spreadsheet (chapter 14) than to Receive them one by one.</div>
+
+  <h4>Step 5 - Turn on alerts, set your name, invite your partner</h4>
+  <ol class="steps">
+    <li><b>Setup → Notifications → Low stock alerts.</b> On: you'll be told when a part reaches its reorder number. You're told once, and only again if it recovers and drops again.</li>
+    <li><b>Setup → This device → name.</b> Type your first name. It's stamped next to every Move you make so the history says who did it.</li>
+    <li><b>Setup → iCloud &amp; Sharing</b> to invite your partner - chapter 16.</li>
+  </ol>
+</div></section>
+
+<!-- ============ TABS ============ -->
+<section id="tabs"><div class="wrap">
+  <div class="kicker">Chapter 3</div>
+  <h2>The tabs along the bottom</h2>
+  <p class="sub">Tap a tab to switch screens - they stay in the same spot every time. <b>What you see depends on your role:</b> Owners get four tabs, Technicians get four too, but the last one is different.</p>
+  <div class="flow">
+    <div class="grid" style="gap:14px">
+      <div class="card"><h3>📦 Parts</h3><p style="margin:0">The home screen. Your catalogue, with a count at your current place. Search it, filter it, do most of your day's work from here.</p></div>
+      <div class="card y"><h3>📷 Scan</h3><p style="margin:0">Camera. Aim at a barcode or LocaTrack QR label and the part opens.</p></div>
+      <div class="card r"><h3>⚠️ Low stock</h3><p style="margin:0">Your shopping list - everything at or below its reorder number.</p></div>
+      <div class="card g"><h3>⚙️ Setup <span class="who o">Owner</span></h3><p style="margin:0">Jobs, costs, history, places, lists, spreadsheets, sharing. Where the business side lives.</p></div>
+      <div class="card g"><h3>👤 Me <span class="who">Technician</span></h3><p style="margin:0">Replaces Setup for a Technician. One box: <b>your name</b>, so your Moves are labelled.</p></div>
+    </div>
+    <div>
+      <div class="phone"><div class="scr">
+        <div class="top"><b>Parts</b></div>
+        <div class="row"><div>20A Single-Pole Breaker<small>Breakers</small></div><span class="pill">12</span></div>
+        <div class="row"><div>14/2 NM-B Wire, 75 m<small>Wire</small></div><span class="pill low">3</span></div>
+        <div class="row"><div>Wire Nuts, Yellow (bag)<small>Connectors</small></div><span class="pill">22</span></div>
+        <div class="row"><div>Duplex Receptacle 15A<small>Devices</small></div><span class="pill">30</span></div>
+        <div class="tabbar"><i class="on">Parts</i><i>Scan</i><i>Low stock</i><i>Setup</i></div>
+      </div><div class="cap">Illustration - your screen may differ slightly</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ WHERE ============ -->
+<section id="where"><div class="wrap">
+  <div class="kicker">Chapter 4</div>
+  <h2>"Where am I?" - the location switcher</h2>
+  <p class="sub">At the top of the Parts screen is a small place name - "Truck 1", say. This is the single most useful setting in the app.</p>
+  <ol class="steps">
+    <li>Tap the place name at the top of <b>Parts</b>.</li>
+    <li>Pick where you are or whose stock you're working from: your truck in the morning, the Shop when you're in the building.</li>
+    <li>The counts in the list now show <b>that place</b>, and quick changes (chapter 7) apply there.</li>
+  </ol>
+  <div class="why">Most of your taps are "I just used one." If the app had to ask "where from?" every time, nobody would bother. So you tell it once where you are, and every quick tap assumes that place. <b>Check it when you start your day</b> - it's the usual reason a count looks "wrong".</div>
+  <div class="tip">The filter menu (chapter 5) has an <b>On [place] only</b> switch. On = show just the parts that are at your place. Off = show the whole catalogue.</div>
+</div></section>
+
+<!-- ============ FIND ============ -->
+<section id="find"><div class="wrap">
+  <div class="kicker">Chapter 5</div>
+  <h2>Finding a part</h2>
+  <p class="sub">Three ways. Use whichever is quickest right now.</p>
+  <div class="choice">
+    <div class="card"><h3>Search</h3><p style="margin:0">You know the name. Fastest from the couch or the truck seat.</p></div>
+    <div class="card y"><h3>Browse + filter</h3><p style="margin:0">You're not sure of the name. Narrow by category, or by "what's on my truck".</p></div>
+    <div class="card g"><h3>Scan</h3><p style="margin:0">The box is in your hand. No typing, no spelling.</p></div>
+  </div>
+
+  <h4>A · Search</h4>
+  <ol class="steps">
+    <li>Tap <span class="btn">Parts</span>. Pull the list down a little to show the search bar.</li>
+    <li>Type a few letters of the <b>name, category or code</b> - "break", "14/2", "wire".
+      <small>Fewer letters finds more. If nothing shows, try fewer.</small></li>
+    <li>Tap the part to open it (chapter 6).</li>
+  </ol>
+
+  <h4>B · Filter and sort</h4>
+  <ol class="steps">
+    <li>Tap the <b>filter button</b> at the top left of Parts.</li>
+    <li><b>On [place] only</b> - show only parts that are here. Handy to see "what's actually on my truck".</li>
+    <li><b>Category</b> - pick one, or "All categories".</li>
+    <li><b>Sort</b> - <b>Name</b> (A to Z), <b>Low stock first</b> (what needs buying floats to the top), or <b>Quantity</b>.</li>
+  </ol>
+
+  <h4>C · Scan</h4>
+  <ol class="steps">
+    <li>Tap <span class="btn">Scan</span>, then <span class="btn">Scan</span> (camera) the first time. <b>Allow the camera</b> when your phone asks.</li>
+    <li>Hold about a hand-width from the barcode or QR label, steady, in decent light.</li>
+    <li>The part opens by itself.</li>
+  </ol>
+  <p><b>If the code isn't known</b> the app says so. An Owner gets an <span class="btn">Add part</span> button that starts a new part with that code already filled in. A Technician is told to ask an Owner.</p>
+  <div class="tip">No barcode - loose screws, bulk wire? Open the part and tap <b>Show / print QR label</b>, print it, stick it on the bin. From then on it scans like anything else. This is why every part has a "LocaTrack code".</div>
+  <div class="tip warn">Scanning needs a real camera. If you're using the app on a Mac, it will ask you to type the code instead.</div>
+</div></section>
+
+<!-- ============ PART PAGE ============ -->
+<section id="part"><div class="wrap">
+  <div class="kicker">Chapter 6</div>
+  <h2>Reading a part's page</h2>
+  <p class="sub">Tap any part. Top to bottom, here's everything on the page.</p>
+  <div class="flow">
+    <div>
+      <table>
+        <tr><th>Section</th><th>What it tells you</th></tr>
+        <tr><td>Top</td><td>Photo, name, category, and <b>On hand</b> - the total across <i>all</i> places.</td></tr>
+        <tr><td>Quick adjust at [place]</td><td>Big <b>−</b> and <b>+</b> buttons with the count at your current place in the middle. See chapter 7.</td></tr>
+        <tr><td>Stock by location</td><td>Every place with its count, plus a <b>Total</b>. Your current place is marked <b>here</b>.</td></tr>
+        <tr><td>Identification</td><td>Manufacturer barcode (if any), LocaTrack code, and <b>Show / print QR label</b>.</td></tr>
+        <tr><td>Cost <span class="who o">Owner</span></td><td>Unit cost, sell price, reorder number. Technicians never see this section.</td></tr>
+        <tr><td>Supplier</td><td>The supplier note, if there is one.</td></tr>
+        <tr><td>History</td><td>Every Move for this part: what, how many, where, which job, <b>who</b>, and when. Newest first.</td></tr>
+      </table>
+      <p style="margin-top:14px">At the top right: <span class="btn">Move stock</span> for anything beyond a single tap, and <span class="btn d">Edit</span> <span class="who o">Owner</span> to change the part's details.</p>
+    </div>
+    <div>
+      <div class="phone"><div class="scr">
+        <div class="top"><b>20A Breaker</b><span style="color:#777">On hand: 16 each</span></div>
+        <div style="margin:10px 12px 0;text-align:center;font-size:11px;color:#777">QUICK ADJUST AT TRUCK 1</div>
+        <div class="field" style="justify-content:space-around;align-items:center;font-size:20px"><span style="color:var(--orange)">⊖</span><span><b style="color:#1c1c1e;font-size:26px">4</b></span><span style="color:#4fb36b">⊕</span></div>
+        <div class="row" style="margin-top:10px"><div>Shop</div><span class="pill">12</span></div>
+        <div class="row"><div>Truck 1 <small>here</small></div><span class="pill">4</span></div>
+        <div class="row"><div><b>Total</b></div><span class="pill">16</span></div>
+      </div><div class="cap">Illustration</div></div>
+    </div>
+  </div>
+  <div class="why">There's no "Edit quantity" anywhere on this page - and that's on purpose. To change a count you record a Move. The <b>History</b> section is where the Moves are kept, so if a count looks off, the answer is usually in there.</div>
+</div></section>
+
+<!-- ============ QUICK ============ -->
+<section id="quick"><div class="wrap">
+  <div class="kicker">Chapter 7 · the everyday one</div>
+  <h2>Quick one-at-a-time changes</h2>
+  <p class="sub">Grabbed one breaker? Don't open a form. Three equally good ways to record "one":</p>
+  <div class="choice">
+    <div class="card"><h3>On the list</h3><p><b>Swipe a row to the right</b> for <span class="btn">Received +1</span>.<br><b>Swipe to the left</b> for <span class="btn">Used −1</span>.</p></div>
+    <div class="card y"><h3>On the part page</h3><p>Tap the big <b>−</b> or <b>＋</b> under "Quick adjust". You see the new count change right away.</p></div>
+    <div class="card g"><h3>Many taps</h3><p>Tap as many times as you need. Five quick taps show up in History as <b>one line</b> ("5 taps"), not five.</p></div>
+  </div>
+  <ol class="steps">
+    <li>Check the place at the top of Parts is where you are (chapter 4).</li>
+    <li>Swipe or tap. Your phone gives a small buzz so you know it registered.</li>
+    <li>The count changes at <b>that place</b>.</li>
+  </ol>
+  <div class="why">Quick taps are deliberately limited: <b>one</b> at a time, <b>current place</b> only, and <b>no job tag</b>. The moment you need more than that - several at once, a different place, or charging a job - use <b>Move stock</b> (next chapter).</div>
+  <div class="tip">Tapped − by accident? Swipe that History line and choose <b>Reverse</b> (chapter 10).</div>
+</div></section>
+
+<!-- ============ MOVE ============ -->
+<section id="move"><div class="wrap">
+  <div class="kicker">Chapter 8 · four kinds of change</div>
+  <h2>Move stock</h2>
+  <p class="sub">Open a part and tap <span class="btn">Move stock</span>. Four big tiles appear. <b>Picking the right tile is the only real decision</b> - everything else follows from it.</p>
+
+  <div class="flow">
+    <div>
+      <table>
+        <tr><th>Tile</th><th>Use it when…</th><th>Count at the place</th></tr>
+        <tr><td>Receive</td><td>New stock arrives: supplier delivery, or a return you're adding back.</td><td class="yes">Goes up</td></tr>
+        <tr><td>Use</td><td>Parts leave and are consumed - installed on a job.</td><td class="no">Goes down</td></tr>
+        <tr><td>Transfer</td><td>Parts go from one of your places to another. Nothing is used up.</td><td>One down, one up</td></tr>
+        <tr><td>Adjust</td><td>The shelf disagrees with the app. Correction only.</td><td>Whatever you enter</td></tr>
+      </table>
+    </div>
+    <div>
+      <div class="phone"><div class="scr">
+        <div class="top"><b>20A Breaker</b></div>
+        <div class="seg"><i>Receive</i><i class="on">Use</i><i>Adjust</i><i>Transfer</i></div>
+        <div class="field"><span>Location</span><span>Truck 1 ›</span></div>
+        <div class="field"><span>Quantity</span><span><b style="color:#1c1c1e">3</b></span></div>
+        <div class="field"><span>Job</span><span>Main St ›</span></div>
+        <div class="go">Save</div>
+      </div><div class="cap">Illustration</div></div>
+    </div>
+  </div>
+
+  <h4>The Save button is grey until it makes sense</h4>
+  <p>You can't save half a form: Save stays grey until the quantity is a real number and the places are filled in (and for <b>Adjust</b>, the note). Grey Save means <i>something is still missing</i>, not that the app is broken.</p>
+
+  <h4>Receive - a delivery arrives</h4>
+  <ol class="steps">
+    <li>Open the part → <span class="btn">Move stock</span> → <span class="btn d">Receive</span>.</li>
+    <li><b>Location:</b> where the stock physically landed. Deliveries usually go to the <b>Shop</b>.</li>
+    <li><b>Quantity:</b> a positive number - what came in. Just under it, "<b>At Shop</b>" shows the count right now, so you can see it before you save.</li>
+    <li><b>Note</b> (optional): "Invoice 4417", "Return from Main St".</li>
+    <li><span class="btn">Save</span>.</li>
+  </ol>
+  <div class="tip">Type the quantity as a plain positive number for Receive, Use and Transfer. The app handles the plus/minus for you.</div>
+
+  <h4>Use - parts go on a job</h4>
+  <ol class="steps">
+    <li>Open the part → <span class="btn">Move stock</span> → <span class="btn d">Use</span>.</li>
+    <li><b>Location:</b> where you took them <i>from</i> - usually your truck.</li>
+    <li><b>Quantity:</b> how many you used (e.g. 3).</li>
+    <li><b>Job (optional)</b> - a new section appears only on Use. Tap it to open a menu: pick a job, choose <b>None</b>, or <b>New job</b> to type "123 Main St" right there.</li>
+    <li><span class="btn">Save</span>. The count at that place drops.</li>
+  </ol>
+  <div class="why"><b>Job or None?</b> Always pick the job when there is one - that's how the app can later tell you what the job cost (chapter 12). "None" is for shop supplies and shrink that don't belong to any one job. A Job is a <i>real record from a list</i>, not typed text, so "123 Main St" can't turn into three spellings.</div>
+  <div class="tip warn">If you use more than the app thinks is there, it still records it, but a brief warning pops up saying the count went below zero. That's usually a sign the starting count was wrong - fix it with an Adjust.</div>
+
+  <h4>Transfer - from one place to another</h4>
+  <ol class="steps">
+    <li>Open the part → <span class="btn">Move stock</span> → <span class="btn d">Transfer</span>.</li>
+    <li>Two boxes appear: <b>From</b> and <b>To</b>. Pick them (e.g. From Shop, To Truck 1).</li>
+    <li><b>Quantity:</b> how many.</li>
+    <li><span class="btn">Save</span> stays grey if From and To are the same place.</li>
+  </ol>
+  <div class="why"><b>Transfer or Use + Receive?</b> Use a Transfer. A transfer writes <i>both</i> halves together - shop down, truck up - so the business total never changes. If you did "Use" then "Receive", your job costs would be wrong because the app would think the part was consumed.</div>
+  <div class="tip">Leftovers coming back from a job site? Transfer <b>From</b> the job site <b>To</b> your truck.</div>
+
+  <h4>Adjust - fixing a wrong count</h4>
+  <ol class="steps">
+    <li>Walk the shelf and count. Say you find <b>11</b> and the app says <b>14</b>.</li>
+    <li>Open the part → <span class="btn">Move stock</span> → <span class="btn d">Adjust</span>.</li>
+    <li><b>Location:</b> the place you counted.</li>
+    <li><b>New adjustment (+/−):</b> type the <i>difference</i>, not the new total: <b>−3</b>. (Use a plus for found extras: <b>2</b> or <b>+2</b>.)</li>
+    <li><b>Note (required):</b> "Cycle count", "Damaged, tossed", "Found behind the shelf".</li>
+    <li><span class="btn">Save</span>. The count is now 11.</li>
+  </ol>
+  <div class="why">Adjust is the only tile that takes a plus <i>or</i> minus, and the only one that insists on a note. A correction without a reason is how stock records quietly rot. The old number isn't erased - the History shows 14 → adjusted −3 → 11, with your name and the reason.</div>
+</div></section>
+
+<!-- ============ PICK ============ -->
+<section id="pick"><div class="wrap">
+  <div class="kicker">Chapter 9 · loading a job</div>
+  <h2>Pick several parts to a job</h2>
+  <p class="sub">Loading the truck for a whole job? Don't Move stock part by part. Fill a basket, then post it in one go.</p>
+  <div class="choice">
+    <div class="card"><h3>One part, one job</h3><p style="margin:0">→ <b>Move stock</b> → Use (chapter 8).</p></div>
+    <div class="card y"><h3>Many parts, one job</h3><p style="margin:0">→ <b>Pick parts to a job</b> (this chapter). One trip through the list.</p></div>
+    <div class="card g"><h3>Just one, no job</h3><p style="margin:0">→ Quick tap (chapter 7).</p></div>
+  </div>
+
+  <ol class="steps">
+    <li>On <span class="btn">Parts</span>, set your location (chapter 4) to the place you're pulling <b>from</b>.</li>
+    <li>Tap the <b>briefcase</b> button (top left). A menu lists your active jobs - pick one, or <b>New job</b> to type a new name.
+      <small>The screen changes: an orange bar at the top says <b>"Picking for [job]"</b> so you can't mistake this for normal browsing.</small></li>
+    <li>Each row now shows <b>"N on hand here"</b> and a <b>− / number / ＋</b> control. Tap ＋ for each part and quantity you're taking. You can also type the number.
+      <small>Set a quantity back to 0 and the part drops out of the basket.</small></li>
+    <li>Prefer scanning? Tap the <b>barcode button</b> in the bottom bar and scan each box - every scan adds 1 and shows a brief message with the new quantity. A code that isn't in the catalogue says "No part for [code]".</li>
+    <li>The bottom bar shows the job name and a running count of parts picked. Owners also see the running <b>cost</b>; Technicians never do.</li>
+    <li>Done? Tap <span class="btn">Commit</span>. Every picked line is recorded as <b>Used on that job</b>, at your current location.</li>
+    <li>A banner appears: <b>"Committed N parts to [job]"</b> with an <span class="btn">Undo</span> button. It only stays for a few seconds.</li>
+  </ol>
+  <div class="why">Nothing is recorded until you tap Commit. You can wander off, change quantities, and decide against it. And because the basket is posted as ordinary "Use" Moves, the stock counts <i>and</i> the job's cost report update together.</div>
+  <h4>Leaving without committing</h4>
+  <p>If the basket has items and you try to leave, the app asks. <span class="btn d">Keep picking</span> returns to your basket. <span class="btn">Discard</span> throws it away and nothing changes.</p>
+  <div class="tip warn">After you tap Commit, only the <b>Undo</b> banner can take the whole batch back, and it disappears after a few seconds. After that, correct individual lines from each part's History (chapter 10) or with a new Receive.</div>
+</div></section>
+
+<!-- ============ UNDO ============ -->
+<section id="undo"><div class="wrap">
+  <div class="kicker">Chapter 10</div>
+  <h2>Undoing a mistake</h2>
+  <p class="sub">You never edit or delete a Move. You <b>reverse</b> it.</p>
+  <ol class="steps">
+    <li>Open the part and scroll to <b>History</b> (or, as an Owner, open <b>Setup → Shop history</b> for every part at once).</li>
+    <li><b>Swipe the line left</b> and tap <span class="btn">Reverse</span> (purple).</li>
+    <li>A confirmation shows exactly what will be reversed, e.g. <b>"Reverse −3"</b>. Tap it to confirm, or <b>Cancel</b>.
+      <small>The extra confirmation is there so a slip of the thumb can't undo something by accident.</small></li>
+    <li>A new line appears with the opposite amount. The original stays.</li>
+  </ol>
+  <div class="why">The message reads <i>"Adds an opposite entry to the history. The original stays."</i> That's the deal: the record is permanent, so nobody can quietly alter the past, and you can always see what really happened.</div>
+  <div class="tip">A row of quick taps (chapter 7) is one line, and Reverse takes back the whole group of taps in one go.</div>
+  <div class="tip">The three levels of "oops": <b>seconds</b> - the Undo banner (after Commit) · <b>later</b> - swipe Reverse in History · <b>count is just wrong</b> - Adjust with a note.</div>
+</div></section>
+
+<!-- ============ LOW STOCK ============ -->
+<section id="low"><div class="wrap">
+  <div class="kicker">Chapter 11</div>
+  <h2>Low stock and reordering</h2>
+  <div class="flow">
+    <div>
+      <p>A part appears on the <span class="btn">Low stock</span> tab when its <b>total across all places</b> is at or below its reorder number. A part with no reorder number set never appears.</p>
+      <ol class="steps">
+        <li>Tap <span class="btn">Low stock</span>.</li>
+        <li>Each row shows the part, its reorder number, and the count it has now (red).</li>
+        <li><b>Owners</b> also see <b>Inventory value</b> at the top - what the stock on your shelves is worth at cost.</li>
+        <li><b>Owners:</b> tap the <b>Export</b> button to send the list as <b>PDF</b>, <b>Excel</b> or <b>CSV</b> by email or message.</li>
+      </ol>
+      <div class="why">The export is grouped by <b>supplier</b> (from each part's Supplier note), with a subtotal for each. That's one purchase order per supplier, ready to send. "Order" quantity is how many to buy to climb back up to the reorder number - never less than 1.</div>
+      <ol class="steps" start="5" style="margin-top:12px">
+        <li>When the delivery arrives, record it as a <b>Receive</b> (chapter 8). The part drops off the list on its own.</li>
+      </ol>
+      <div class="tip">Alerts: with <b>Low stock alerts</b> on in Setup, you're told when a part first reaches its reorder number. They show while the app is open or in use, and only repeat after the part has recovered and dropped again.</div>
+    </div>
+    <div>
+      <div class="phone"><div class="scr">
+        <div class="top"><b>Low stock</b></div>
+        <div class="row"><div>14/2 NM-B Wire, 75 m<small>Reorder at 6</small></div><span class="pill low">4</span></div>
+        <div class="row"><div>GFCI Receptacle 20A<small>Reorder at 5</small></div><span class="pill low">2</span></div>
+        <div class="row"><div>1/2" EMT Strap<small>Reorder at 50</small></div><span class="pill low">38</span></div>
+        <div class="tabbar"><i>Parts</i><i>Scan</i><i class="on">Low stock</i><i>Setup</i></div>
+      </div><div class="cap">Illustration</div></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ============ COSTS ============ -->
+<section id="costs"><div class="wrap">
+  <div class="kicker">Chapter 12 · Owner</div>
+  <h2>Job costs and Shop history</h2>
+
+  <h4>What did that job cost?</h4>
+  <ol class="steps">
+    <li><span class="btn">Setup</span> → <b>Job costs</b>.</li>
+    <li><b>Job:</b> choose one from the list.</li>
+    <li><b>Period:</b> set the <b>From</b> and <b>To</b> dates. Widen them to cover the whole job.</li>
+    <li>You see each part used, <b>quantity × unit cost</b>, the line total, and the <b>Job total</b>.</li>
+    <li>Use <b>Export</b> to send it as PDF, Excel or CSV for the invoice.</li>
+  </ol>
+  <div class="why">The report only counts Moves that were <b>tagged to the job</b>. Parts used with Job = None still lower the stock, but won't appear on any bill. If a total looks low, look for untagged Uses.</div>
+  <div class="tip">If a job shows "No usage tagged to this job in this period", widen the dates first.</div>
+
+  <h4>Where did those breakers go?</h4>
+  <ol class="steps">
+    <li><span class="btn">Setup</span> → <b>Shop history</b>.</li>
+    <li>You see the latest 200 Moves across <b>all</b> parts, newest first - what, where, which job, who, and when.</li>
+    <li>Use the <b>Job</b> menu at the top to narrow it to one job.</li>
+    <li>Swipe a line to <b>Reverse</b> it (chapter 10).</li>
+  </ol>
+</div></section>
+
+<!-- ============ TIDY ============ -->
+<section id="tidy"><div class="wrap">
+  <div class="kicker">Chapter 13 · Owner</div>
+  <h2>Tidying up: jobs, places and parts</h2>
+  <p class="sub">The app almost never deletes things, because deleting would also delete the history behind your records. Here's what each choice does:</p>
+  <table>
+    <tr><th>Thing</th><th>Archive</th><th>Delete</th></tr>
+    <tr><td>Job <br><small style="font-weight:400;color:var(--mut)">Setup → Jobs</small></td><td>Swipe → <b>Archive</b>. Hidden from pickers; cost history stays. <b>Restore</b> any time from the Archived section.</td><td>Only an <i>archived</i> job that was <b>never used</b>. A job with usage can't be deleted - its cost history is protected.</td></tr>
+    <tr><td>Location <br><small style="font-weight:400;color:var(--mut)">Setup → Locations</small></td><td>Swipe → <b>Archive</b> when a truck is sold or a site closes. History stays. <b>Restore</b> any time.</td><td>Not offered. Archive instead.</td></tr>
+    <tr><td>Category / Unit <br><small style="font-weight:400;color:var(--mut)">Setup → Lists</small></td><td>Archive a value to stop offering it. Rename updates every part using it.</td><td>If parts still use a value, the app says <b>"In use"</b> and won't remove it.</td></tr>
+    <tr><td>Part <br><small style="font-weight:400;color:var(--mut)">Parts → swipe</small></td><td>(no archive)</td><td>Swipe the row <b>left</b> → <b>Delete</b> → confirm. Removes the part <b>and its whole history</b>, on every device. Best for typos and duplicates.</td></tr>
+  </table>
+  <div class="tip warn">Deleting a part can't be undone, and it also erases it from iCloud. If a part is merely out of stock, leave it - zero is a perfectly good count.</div>
+  <h4>Adding a job ahead of time</h4>
+  <ol class="steps">
+    <li><span class="btn">Setup</span> → <b>Jobs</b>.</li>
+    <li>Type the <b>Name</b> ("123 Main St") and, if you like, the <b>Client</b>. Tap <span class="btn">Add</span>.</li>
+  </ol>
+  <p>You can also create a job on the spot from Use or Pick - handy in the field.</p>
+</div></section>
+
+<!-- ============ SHEET ============ -->
+<section id="sheet"><div class="wrap">
+  <div class="kicker">Chapter 14 · Owner</div>
+  <h2>Spreadsheets in and out</h2>
+  <p class="sub">For lots of parts, a spreadsheet on a computer beats typing on a phone. Everything lives under <b>Setup → Catalogue</b>.</p>
+  <table>
+    <tr><th>Button</th><th>What it does</th></tr>
+    <tr><td>Import sample data</td><td>Adds a generic set of example parts. For practising only.</td></tr>
+    <tr><td>Export blank template (CSV)</td><td>Gives you an empty sheet with the right column headings, with one example row, to fill in on a computer.</td></tr>
+    <tr><td>Import spreadsheet (CSV)</td><td>Pick your finished file. Parts are added or updated and counts are set.</td></tr>
+    <tr><td>Export inventory (CSV)</td><td>Sends out everything you have now - parts and the quantity at each place.</td></tr>
+  </table>
+  <h4>A · Start fresh with your real list</h4>
+  <ol class="steps">
+    <li><b>Export blank template</b> and email it to yourself.</li>
+    <li>On a computer, fill in one row per part. Save as <b>CSV</b>.</li>
+    <li>If you've been playing with sample data, first do <b>Danger zone → Empty inventory</b>. It removes all parts and counts but <b>keeps your places, jobs and lists</b>.</li>
+    <li><b>Import spreadsheet (CSV)</b> and choose your file. The app tells you how many parts were added or updated.</li>
+  </ol>
+  <h4>B · Round trip: edit your existing inventory</h4>
+  <ol class="steps">
+    <li><b>Export inventory (CSV)</b> and open it on a computer.</li>
+    <li>Change costs, names or quantities. <b>Don't touch the ID column.</b></li>
+    <li>Import it back. The app matches rows by that ID, so it updates the existing part instead of making a duplicate.</li>
+  </ol>
+  <div class="why">Changed quantities don't overwrite anything. For each difference the app records an <b>Adjustment</b> to reach your number, so the history still shows what happened. Import also never deletes: removing a row from the sheet doesn't remove the part.</div>
+  <div class="tip warn"><b>Danger zone</b> (bottom of Setup): <b>Empty inventory</b> deletes all parts and counts. <b>Reset to starter inventory</b> deletes everything <i>and</i> puts the sample parts back. Both wipe iCloud too and <b>can't be undone</b>. Each asks you to confirm; read it carefully before you tap.</div>
+</div></section>
+
+<!-- ============ ROLES ============ -->
+<section id="roles"><div class="wrap">
+  <div class="kicker">Chapter 15</div>
+  <h2>Owner vs Technician</h2>
+  <p class="sub">The role controls what's visible. The idea: field workers need to move stock quickly, but don't need to see what anything costs or be able to change the catalogue.</p>
+  <table>
+    <tr><th>Can they…</th><th>Owner</th><th>Technician</th></tr>
+    <tr><td>Search, scan, filter, look up parts</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>Quick taps, Receive, Use, Transfer, Adjust</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>Pick parts to a job</td><td class="yes">Yes</td><td class="yes">Yes (count only, no cost)</td></tr>
+    <tr><td>Reverse a Move from a part's History</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>See the Low stock list</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+    <tr><td>See cost, sell price, inventory value, job costs</td><td class="yes">Yes</td><td class="no">Never</td></tr>
+    <tr><td>Add, edit or delete parts; set reorder numbers</td><td class="yes">Yes</td><td class="no">No</td></tr>
+    <tr><td>Setup tab: jobs, places, lists, history, spreadsheets, sharing</td><td class="yes">Yes</td><td class="no">No - gets the <b>Me</b> tab instead</td></tr>
+  </table>
+  <h4>Check what a Technician sees</h4>
+  <ol class="steps">
+    <li><span class="btn">Setup</span> → <b>Preview as Technician</b>.</li>
+    <li>The app now behaves like a Technician's. A banner at the top says <b>Previewing as Technician</b>.</li>
+    <li>Tap <span class="btn">Exit</span> on the banner to come back.</li>
+  </ol>
+  <h4>Your name on every Move</h4>
+  <p>Owners set it under <b>Setup → This device</b>; Technicians under the <b>Me</b> tab. Your name then appears beside each Move in the History. Set it once - it's what makes "who used the 14/2?" answerable.</p>
+</div></section>
+
+<!-- ============ SHARE ============ -->
+<section id="share"><div class="wrap">
+  <div class="kicker">Chapter 16</div>
+  <h2>Sharing with your partner</h2>
+  <p class="sub">Your phone holds its own copy and shares it through iCloud. Both phones end up with the same counts, with no sign-in screens and no accounts to set up beyond iCloud.</p>
+
+  <h4>Sending the invite <span class="who o">Owner</span></h4>
+  <ol class="steps">
+    <li>Make sure your phone is signed in to iCloud (<b>Settings → [your name]</b>).</li>
+    <li><span class="btn">Setup</span> → <b>iCloud &amp; Sharing</b> → <b>Share inventory</b>.</li>
+    <li>The iPhone share sheet opens. Choose your partner by message or email.</li>
+    <li><b>Choose their access:</b>
+      <div class="choice" style="margin-top:10px">
+        <div class="card y"><h3>Can make changes</h3><p style="margin:0">They join as an <b>Owner</b>: full access, including cost. For a co-owner.</p></div>
+        <div class="card"><h3>View only (Read Only)</h3><p style="margin:0">They join as a <b>Technician</b>: no cost, no catalogue editing, no Setup.</p></div>
+      </div>
+    </li>
+    <li>Send it.</li>
+  </ol>
+  <h4>Accepting <span class="who">Your partner</span></h4>
+  <ol class="steps">
+    <li>Install LocaTrack from the App Store.</li>
+    <li><b>Tap the invite link first</b> (in the message or email) and accept. Don't build their own list first.</li>
+    <li>The inventory fills in. If it's slow, give it a few minutes with signal.</li>
+  </ol>
+  <div class="why">Opening the invite <i>before</i> setting anything up keeps the partner from creating a second, separate set of starter parts that would collide with yours.</div>
+  <h4>Checking it's working</h4>
+  <p><b>Setup → iCloud sync</b> shows the sync state. If <b>Share inventory</b> is greyed out, iCloud isn't ready on that phone - check <b>Settings → [your name] → iCloud</b>.</p>
+  <div class="grid g3" style="margin-top:18px">
+    <div class="card"><h3>No signal? Keep going</h3><p style="margin:0">Basements, crawlspaces, rural sites: record as usual. It syncs when you're back online.</p></div>
+    <div class="card y"><h3>Both edit at once</h3><p style="margin:0">If you both used the same part offline, both changes count. Neither overwrites the other.</p></div>
+    <div class="card g"><h3>Small delay is normal</h3><p style="margin:0">Syncing takes seconds to minutes. If numbers differ, wait a minute before assuming something's wrong.</p></div>
+  </div>
+</div></section>
+
+<!-- ============ HELP ============ -->
+<section id="help"><div class="wrap">
+  <div class="kicker">Chapter 17</div>
+  <h2>If you get stuck</h2>
+  <details><summary>The count looks wrong</summary><p>First check the <b>location at the top of Parts</b> - the count shown is for that place. Then open the part and read its <b>History</b> for what happened. If the shelf really differs, record an <b>Adjust</b> with a note.</p></details>
+  <details><summary>Save is grey and I can't tap it</summary><p>Something's missing: a quantity, a place, or (for Adjust) a note. For Transfer, From and To must differ.</p></details>
+  <details><summary>I used parts but forgot the job</summary><p>The stock is right, but the job's cost report is short. You can reverse the Use and record it again with the job picked. Do this from the part's History.</p></details>
+  <details><summary>I can't find a part we carry</summary><p>Try fewer letters. Check that <b>On [place] only</b> in the filter is off and the category is "All". Or scan the box. If it truly isn't there, an Owner needs to add it.</p></details>
+  <details><summary>The count went negative</summary><p>You recorded more going out than the app thought it had. The starting count was probably wrong. Adjust it, with a note.</p></details>
+  <details><summary>I don't see prices, the ＋ button, or a Setup tab</summary><p>Normal for a Technician. Cost, editing and Setup are Owner-only.</p></details>
+  <details><summary>My partner's numbers differ from mine</summary><p>Give both phones a minute with signal and iCloud. Still different? Owners can check <b>Setup → iCloud sync</b>; both phones must be signed in to iCloud.</p></details>
+  <details><summary>The camera won't scan</summary><p>iPhone <b>Settings → LocaTrack → Camera</b> must be on. Good light, steady hand, about a hand-width away. Or type the code in.</p></details>
+  <details><summary>I archived a job or place by mistake</summary><p>Nothing's lost. In <b>Setup → Jobs</b> or <b>Locations</b>, open the <b>Archived</b> section and swipe the row to <b>Restore</b>.</p></details>
+</div></section>
+
+<!-- ============ CHEAT SHEET ============ -->
+<section><div class="wrap">
+  <div class="kicker">Print this part</div>
+  <h2>Pocket cheat sheet</h2>
+  <table>
+    <tr><th>I want to…</th><th>Do this</th></tr>
+    <tr><td>Set where I am</td><td>Parts → place name at the top</td></tr>
+    <tr><td>Find a part</td><td>Parts → search · or Scan</td></tr>
+    <tr><td>Use / return one</td><td>Swipe the row left / right · or − ＋ on the part page</td></tr>
+    <tr><td>Use several on a job</td><td>Open part → Move stock → <b>Use</b> → Location + Job → Save</td></tr>
+    <tr><td>Load a whole job</td><td>Parts → briefcase → job → ＋ parts → Commit</td></tr>
+    <tr><td>Log a delivery</td><td>Move stock → <b>Receive</b> → Shop</td></tr>
+    <tr><td>Restock the truck</td><td>Move stock → <b>Transfer</b> → From Shop To Truck</td></tr>
+    <tr><td>Correct a count</td><td>Move stock → <b>Adjust</b> → the difference + a note</td></tr>
+    <tr><td>Undo something</td><td>Part History → swipe left → <b>Reverse</b></td></tr>
+    <tr><td>See what to buy</td><td>Low stock tab</td></tr>
+    <tr><td>See a job's cost (Owner)</td><td>Setup → Job costs</td></tr>
+    <tr><td>See who did what (Owner)</td><td>Setup → Shop history</td></tr>
+  </table>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="hazard" style="margin-bottom:26px"></div>
+  <a href="https://apps.apple.com/ca/app/locatrack/id6813612392" target="_blank" rel="noopener"><b style="color:var(--yellow)">LocaTrack on the App Store</b></a><br>
+  Questions or problems: SkillTrack101@gmail.com
+</div></footer>
+
+</body>
+</html>
